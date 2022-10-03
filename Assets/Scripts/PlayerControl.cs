@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerControl : globalSettings
+public class PlayerControl : MonoBehaviour
 {
     Transform playerTrans;
     Rigidbody2D playerRig;
@@ -29,7 +29,7 @@ public class PlayerControl : globalSettings
             float upSpeed = Physics2D.gravity.magnitude * getUpMulti();
             playerRig.AddForce(new Vector3(0f, upSpeed, 0f), ForceMode2D.Force);
             //Debug.Log(SpeedMul);
-        }    
+        }
     }
 
     /// <summary>

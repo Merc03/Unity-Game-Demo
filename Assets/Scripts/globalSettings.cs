@@ -1,19 +1,13 @@
 using System;
 using UnityEngine;
 
-public class globalSettings : MonoBehaviour
+static public class globalSettings
 {
-    const float globalRotationSpeed = 30f;
+    const float RotationSpeed = 30f;
+    public const float RotationLocationY = -17.5f;
+    static TimeSpan time;
 
-    TimeSpan time;
-
-    void Awake()
-    {
-        time = DateTime.Now.TimeOfDay;
-    }
-
-    // Update is called once per frame
-    void Update()
+    static void Update()
     {
         time = DateTime.Now.TimeOfDay;
     }
@@ -22,9 +16,9 @@ public class globalSettings : MonoBehaviour
     /// Determines rotation degree by seconds
     /// </summary>
     /// <returns></returns>
-    public float getDegree() {
+    static public float getDegree() {
         Update();
         time = DateTime.Now.TimeOfDay;
-        return (float)time.TotalSeconds * globalRotationSpeed;
+        return (float)time.TotalSeconds * RotationSpeed;
     }
 }

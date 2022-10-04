@@ -20,13 +20,11 @@ public class ParticleGlobalControl : MonoBehaviour
         for(int i = 0; i < GlobalSettings.maxParticle; ++i) {
             GameObject cur = (GameObject) Resources.Load("Prefabs/Particle Yellow");
             Instantiate(cur);
-            Debug.Log("Successfully initialized");
         }
 
         for(int i = 0; i < 5; ++i) {
             GameObject cur = (GameObject) Resources.Load("Prefabs/Particle Blue");
             Instantiate(cur);
-            Debug.Log("Successfully initialized");
         }
     }
 
@@ -38,11 +36,19 @@ public class ParticleGlobalControl : MonoBehaviour
         foreach(string cur in toFind) {
             GameObject tar = GameObject.Find(cur + "(Clone)");;
             while(tar != null) {
-                Debug.Log("Successfully removed");
+                //Debug.Log("Successfully removed");
                 tar.SendMessage("delete");
                 tar = GameObject.Find(cur + "(Clone)");;
             }
         }
+    }
+
+    public void generateParticle(Vector3 targetPosition) {
+        //Debug.Log("To generate black particle at" + other.transform.position.x + other.transform.position.y);
+        GameObject cur = (GameObject) Resources.Load("Prefabs/Particle Black");
+        cur = Instantiate(cur);
+        //if(cur == null) Debug.Log("Initialization Failed");
+        cur.GetComponent<ParticleBlack>().generate(targetPosition);
     }
 }
 
@@ -53,10 +59,11 @@ public class Particle : MonoBehaviour
     public SpriteRenderer sRender;
 
     /// <summary>
-    /// Generate the particle outside the camera with particle color
+    /// Automatically generate the particle outside the camera with particle color
     /// </summary>
-    public virtual void generate() {
+    public void generate() {
         trans = current.GetComponent<Transform>();
+        sRender = GetComponent<SpriteRenderer>();
         trans.parent = GameObject.Find("Particle Rotation").transform;
 
         do {
@@ -65,16 +72,17 @@ public class Particle : MonoBehaviour
             trans.RotateAround(trans.parent.localPosition, new Vector3(0f, 0f, 1f), GlobalSettings.getDegree() * Random.value);
         } while(isInCamera());
 
-        sRender = GetComponent<SpriteRenderer>();
-        sRender.sortingLayerName = "Objects";
-        sRender.sortingOrder = 2;
     }
 
     /// <summary>
-    /// Generate the particle at given position
+    /// Manually generate the particle at given position
     /// </summary>
-    public virtual void generate(float positionX, float positonY) {
+    public void generate(Vector3 targetPosition) {
+        trans = current.GetComponent<Transform>();
+        sRender = GetComponent<SpriteRenderer>();
+        trans.parent = GameObject.Find("Particle Fixed").transform;
 
+        trans.position = targetPosition;
     }
 
     public void delete() {

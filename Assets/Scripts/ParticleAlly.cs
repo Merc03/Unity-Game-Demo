@@ -14,7 +14,7 @@ public class ParticleAlly : MonoBehaviour
 
         sRender = GetComponent<SpriteRenderer>();
         sRender.sortingLayerName = "Objects";
-        sRender.sortingOrder = 2;
+        sRender.sortingOrder = 1;
 
         trans.parent = GameObject.Find("Particle Allies").transform;
 
@@ -49,5 +49,9 @@ public class ParticleAlly : MonoBehaviour
 
         sRender.enabled = false;
         //Debug.Log("Refreshed");
+    }
+
+    private void OnTriggerStay2D(Collider2D other) {
+        refresh();
     }
 }

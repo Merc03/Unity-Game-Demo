@@ -12,7 +12,7 @@ public class ParticleAllies : MonoBehaviour
 
     void Awake()
     {
-        trans = GameObject.Find("Particle Allies").transform;
+        trans = gameObject.GetComponent<Transform>();
 
         particle = new GameObject[maxParticle];
         for(int i = 0; i < maxParticle; ++i) {

@@ -6,15 +6,18 @@ public class PlayerControl : MonoBehaviour
 {
     Transform playerTrans;
     Rigidbody2D playerRig;
+    CircleCollider2D playerCol;
+    float originalPosition;
+    const float maxHeight = 2.5f;
+    float energy;
 
-    float originalPosition, maxHeight;
 
     void Awake() {
         playerTrans = gameObject.GetComponent<Transform>();
         playerRig = gameObject.GetComponent<Rigidbody2D>();
+        playerCol = gameObject.GetComponent<CircleCollider2D>();
 
         originalPosition = playerTrans.localPosition.y;
-        maxHeight = 2.5f;
     }
 
     void Update() {
@@ -36,7 +39,7 @@ public class PlayerControl : MonoBehaviour
     /// Determines acceleration curve
     /// </summary>
     /// <returns></returns>
-    float getUpMulti() {
+    private float getUpMulti() {
         float portionY = (playerTrans.localPosition.y - originalPosition) / maxHeight;
         /*if(portionY > 1) {
             return 1f;

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class groundRotation : MonoBehaviour
+public class GroundRotation : MonoBehaviour
 {
     [SerializeField] Transform ground;
 
@@ -15,6 +15,6 @@ public class groundRotation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ground.localRotation = Quaternion.Euler(0f, 0f, globalSettings.getDegree());
+        ground.localRotation = Quaternion.Euler(0f, 0f, GlobalSettings.getDegree());
     }
 }

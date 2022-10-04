@@ -1,11 +1,12 @@
 using System;
 using UnityEngine;
 
-static public class globalSettings
+static public class GlobalSettings
 {
     const float RotationSpeed = 30f;
     public const float RotationLocationY = -17.5f;
     static TimeSpan time;
+    public static int maxParticle = 30;
 
     static void Update()
     {

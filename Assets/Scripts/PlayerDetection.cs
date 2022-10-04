@@ -27,7 +27,7 @@ public class PlayerDetection : MonoBehaviour
         trans.localScale = new Vector3(radius, radius, 1f);
         // col.radius += 0.001f;
 
-        Debug.Log(Energy);
+        //Debug.Log(Energy);
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
@@ -37,12 +37,17 @@ public class PlayerDetection : MonoBehaviour
                 break;
             }
 
+            case "Blue": {
+
+                break;
+            }
+
             case "Ground": {
                 break;
             }
 
             default: {
-                Debug.Log("Unknow Trigger");
+                Debug.Log("Unknow Trigger: " + other.name);
                 break;
             }
         }
@@ -50,7 +55,7 @@ public class PlayerDetection : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other) {
         if(other.tag != "Ground") {
-            Debug.Log("Unknown Trigger");
+            //Debug.Log("Unknown Trigger: " + other.name);
             return;
         }
 

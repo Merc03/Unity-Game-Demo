@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7670630186056187979}
   - component: {fileID: 1274913549944291756}
   m_Layer: 0
-  m_Name: Particle Ally
+  m_Name: Particle Yellow
   m_TagString: Yellow
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

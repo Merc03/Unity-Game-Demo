@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Yellow
   - Ground
+  - Blue
+  - Black
+  - Pink
+  - White
   layers:
   - Default
   - TransparentFX

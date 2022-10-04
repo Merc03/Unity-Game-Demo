@@ -6,22 +6,35 @@ public class PlayerDetection : MonoBehaviour
 {
     Transform trans;
     CircleCollider2D col;
-    float radius;
-    float energy;
     const float energyGainYellow = 0.1f;
-    const float energyGainGround = 0.05f;
-    const float energyFade = 0.025f;
+    const float energyGainGround = 0.105f;
+    const float energyFade = 0.1f;
     const float maxEnergy = 1.5f;
+    const float effectTime = 5.0f;
+    float energy;
+    /// <summary>
+    /// Buff rest time counted by seconds
+    /// </summary>
+    float effectRest;
 
     void Awake() {
         trans = gameObject.GetComponent<Transform>();
         col = gameObject.GetComponent<CircleCollider2D>();
-        Energy = 0f;
+        effectRest = Energy = 0f;
     }
 
     void Update() {
-        Energy -= energyFade * Time.deltaTime;
-        radius = 1.0f + Energy * Energy;
+        EffectRest -= Time.deltaTime;
+
+        float radius;
+        if(EffectRest > 0f) { // buff exists
+            // to be adjusted
+            radius = 1.0f + maxEnergy * maxEnergy;
+        }
+        else {
+            Energy -= energyFade * Time.deltaTime;
+            radius = 1.0f + Energy * Energy;
+        }
 
         // keep transform and collider at the same size
         trans.localScale = new Vector3(radius, radius, 1f);
@@ -38,6 +51,21 @@ public class PlayerDetection : MonoBehaviour
             }
 
             case "Blue": {
+                EffectRest = effectTime;
+                break;
+            }
+
+            case "White": {
+
+                break;
+            }
+
+            case "Black": {
+
+                break;
+            }
+
+            case "Pink": {
 
                 break;
             }
@@ -74,6 +102,17 @@ public class PlayerDetection : MonoBehaviour
             energy = value;
             if(energy < 0f) energy = 0f;
             if(energy > maxEnergy) energy = maxEnergy;
+        }
+    }
+
+    public float EffectRest {
+        get {
+            return effectRest;
+        }
+        set {
+            effectRest = value;
+            if(effectRest < 0f) effectRest = 0f;
+            if(effectRest > effectTime) effectRest = effectTime;
         }
     }
 }

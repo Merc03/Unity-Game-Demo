@@ -22,6 +22,12 @@ public class ParticleGlobalControl : MonoBehaviour
             Instantiate(cur);
             Debug.Log("Successfully initialized");
         }
+
+        for(int i = 0; i < 5; ++i) {
+            GameObject cur = (GameObject) Resources.Load("Prefabs/Particle Blue");
+            Instantiate(cur);
+            Debug.Log("Successfully initialized");
+        }
     }
 
     /// <summary>

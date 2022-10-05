@@ -27,8 +27,20 @@ public class ParticleBlack : Particle {
 
         if(timeWaitRest <= 0f) {
             Vector3 deltaPosition = GameObject.Find("Player").transform.position - trans.position;
-            trans.position += deltaPosition / 2.0f * Time.deltaTime;
+            trans.position += deltaPosition / 4.0f * Time.deltaTime;
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D other) {
+        //Debug.Log(other.name);
+        if(other.tag == "Black") {
+            //Debug.Log("Triggered");
+            if(other.transform.position.x > trans.position.x) {
+                delete();
+            }
+            else {
+                trans.localScale *= 1.2f;
+            }
+        }
+    }
 }

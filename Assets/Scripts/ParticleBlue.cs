@@ -17,7 +17,8 @@ public class ParticleBlue : Particle
     private void OnTriggerStay2D(Collider2D other) {
         //to be rewrite
 
-        generate();
-        //delete();
+        if(other.tag == "Player") {
+            generate();
+        }
     }
 }

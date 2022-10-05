@@ -133,7 +133,6 @@ GameObject:
   m_Component:
   - component: {fileID: 120292266}
   - component: {fileID: 120292265}
-  - component: {fileID: 120292267}
   m_Layer: 0
   m_Name: Particle Rotation
   m_TagString: Untagged
@@ -168,18 +167,6 @@ Transform:
   m_Father: {fileID: 1960315709}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &120292267
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 120292264}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cce1e370027c49140bf5dd2cc46ae4f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &389098473
 GameObject:
   m_ObjectHideFlags: 0
@@ -195,7 +182,7 @@ GameObject:
   - component: {fileID: 389098478}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5149,7 +5136,7 @@ GameObject:
   - component: {fileID: 458621392}
   m_Layer: 0
   m_Name: Player Detection
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5373,6 +5360,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1303912793}
+  - component: {fileID: 1303912794}
   m_Layer: 0
   m_Name: Gobla Control
   m_TagString: Untagged
@@ -5395,6 +5383,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1303912794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1303912791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 790bd48af20045b41820ddae3f68488a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1861551414
 GameObject:
   m_ObjectHideFlags: 0

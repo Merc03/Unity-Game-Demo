@@ -49,4 +49,10 @@ public class PlayerControl : MonoBehaviour
         }*/
         return (- portionY * portionY + 1) * 2f;
     }
+
+    private void OnTriggerEnter2D(Collider2D other) {
+        if(other.tag == "Black") {
+            Debug.Log("Defeated");
+        }
+    }
 }

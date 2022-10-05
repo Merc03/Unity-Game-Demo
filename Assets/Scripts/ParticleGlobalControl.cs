@@ -4,15 +4,11 @@ using UnityEngine;
 
 public class ParticleGlobalControl : MonoBehaviour
 {
-    void Awake() {
-        initialize();
-    }
-
     /// <summary>
     /// Start a new game and generate particle
     /// </summary>
     public void initialize() {
-        // clearAll();
+        clearAll();
 
         // to be rewrite
 
@@ -32,13 +28,11 @@ public class ParticleGlobalControl : MonoBehaviour
     /// (Unsafe, to be tested !) Clear all particles
     /// </summary>
     public void clearAll() {
-        string[] toFind = {"Particle Yellow", "Particle Blue", "Particle White", "Particle Black"};
-        foreach(string cur in toFind) {
-            GameObject tar = GameObject.Find(cur + "(Clone)");;
-            while(tar != null) {
-                //Debug.Log("Successfully removed");
-                tar.SendMessage("delete");
-                tar = GameObject.Find(cur + "(Clone)");;
+        GameObject[] fathers = {gameObject.transform.GetChild(0).gameObject, gameObject.transform.GetChild(1).gameObject};
+        foreach(GameObject father in fathers) {
+            int childCount = father.transform.childCount;
+            for(int i = 0; i < childCount; ++i) {
+                Destroy(father.transform.GetChild(i).gameObject);
             }
         }
     }

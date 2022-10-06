@@ -10,14 +10,17 @@ public class PlayerControl : MonoBehaviour
     float originalPosition;
     const float maxHeight = 2.5f;
     float energy;
-
-
     void Awake() {
         playerTrans = gameObject.GetComponent<Transform>();
         playerRig = gameObject.GetComponent<Rigidbody2D>();
         playerCol = gameObject.GetComponent<CircleCollider2D>();
 
-        originalPosition = playerTrans.localPosition.y;
+        initialize();
+    }
+
+    public void initialize() {
+        originalPosition = -0.1f;
+        transform.GetComponentInChildren<PlayerDetection>().initialize();
     }
 
     void Update() {
@@ -27,8 +30,10 @@ public class PlayerControl : MonoBehaviour
 
     void FixedUpdate() {
         //playerRig.velocity = new Vector3(0f, 0f, 0f);
+        //Debug.Log("Updating");
         playerTrans.localRotation = Quaternion.Euler(playerRig.velocity);
         if(Input.GetKey(KeyCode.Space)) {
+            //Debug.Log("Pressed Space");
             float upSpeed = Physics2D.gravity.magnitude * getUpMulti();
             playerRig.AddForce(new Vector3(0f, upSpeed, 0f), ForceMode2D.Force);
             //Debug.Log(SpeedMul);
@@ -41,18 +46,14 @@ public class PlayerControl : MonoBehaviour
     /// <returns></returns>
     private float getUpMulti() {
         float portionY = (playerTrans.localPosition.y - originalPosition) / maxHeight;
-        /*if(portionY > 1) {
-            return 1f;
-        }
-        else {
-            return Mathf.Sqrt(- portionY + 1f) + 1;
-        }*/
-        return (- portionY * portionY + 1) * 2f;
+
+        return (- portionY * portionY + 1) * 4f;
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.tag == "Black") {
             Debug.Log("Defeated");
+            GameObject.Find("Global Control").GetComponent<GlobalControl>().endGame();
         }
     }
 }

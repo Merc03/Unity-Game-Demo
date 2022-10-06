@@ -20,7 +20,11 @@ public class PlayerDetection : MonoBehaviour
     void Awake() {
         trans = gameObject.GetComponent<Transform>();
         col = gameObject.GetComponent<CircleCollider2D>();
-        effectRest = Energy = 0f;
+        initialize();
+    }
+
+    public void initialize() {
+        EffectRest = Energy = 0f;
     }
 
     void Update() {
@@ -61,7 +65,6 @@ public class PlayerDetection : MonoBehaviour
             }
 
             case "Black": {
-
                 break;
             }
 

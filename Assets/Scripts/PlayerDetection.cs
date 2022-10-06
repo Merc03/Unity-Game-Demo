@@ -68,7 +68,6 @@ public class PlayerDetection : MonoBehaviour
             }
 
             case "Pink": {
-
                 break;
             }
 

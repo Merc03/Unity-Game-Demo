@@ -91,11 +91,16 @@ public class ParticleGlobalControl : MonoBehaviour
     /// </summary>
     /// <param name="targetPosition"></param>
     public void generateParticle(Vector3 targetPosition) {
-        //Debug.Log("To generate black particle at" + other.transform.position.x + other.transform.position.y);
-        GameObject cur = (GameObject) Resources.Load("Prefabs/Particle Black");
-        cur = Instantiate(cur);
-        //if(cur == null) Debug.Log("Initialization Failed");
-        cur.GetComponent<ParticleBlack>().generate(targetPosition);
+        if(Random.value > 0.5f) {
+            GameObject cur = (GameObject) Resources.Load("Prefabs/Particle Black");
+            cur = Instantiate(cur);
+
+            cur.GetComponent<ParticleBlack>().generate(targetPosition);
+        }
+        else {
+             GameObject cur = (GameObject) Resources.Load("Prefabs/Particle Grey");
+            Instantiate(cur);
+        }
     }
 
     /// <summary>

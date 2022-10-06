@@ -39,13 +39,13 @@ public class ParticleBlack : Particle {
                     delete();
                 }
                 else {
-                    trans.localScale *= 1.2f;
+                    trans.localScale *= 1.5f;
                 }
                 break;
             }
 
             case "White": {
-                trans.localScale /= 1.44f;
+                trans.localScale /= 1.5f;
                 if(trans.localScale.x < 0.25f) {
                     delete();
                 }

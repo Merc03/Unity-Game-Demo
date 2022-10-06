@@ -21,19 +21,22 @@ public class ParticleGlobalControl : MonoBehaviour
 
     void Update() {
         targetBlack = null;
-        Transform father = gameObject.transform.Find("Particle Fixed");
-        int childCount = father.childCount;
-        for(int i = 0; i < childCount; ++i) {
-            GameObject temp = father.GetChild(i).gameObject;
-            if(temp.tag == "Black") {
-                if(targetBlack == null) {
-                    targetBlack = temp;
-                }
-                else {
-                    float disOld = Vector3.Distance(player.transform.position, targetBlack.transform.position);
-                    float disNew = Vector3.Distance(player.transform.position, temp.transform.position);
-                    if(disNew < disOld) {
-                        targetBlack = temp;
+        GameObject[] fathersObj = {gameObject.transform.GetChild(0).gameObject, gameObject.transform.GetChild(1).gameObject};
+        foreach(GameObject fatherObj in fathersObj) {
+            Transform father = fatherObj.transform;
+            int childCount = father.childCount;
+            for(int i = 0; i < childCount; ++i) {
+                GameObject temp = father.GetChild(i).gameObject;
+                if(temp.tag == "Black") {
+                    if(targetBlack == null) {
+                          targetBlack = temp;
+                    }
+                    else {
+                        float disOld = Vector3.Distance(player.transform.position, targetBlack.transform.position);
+                        float disNew = Vector3.Distance(player.transform.position, temp.transform.position);
+                        if(disNew < disOld) {
+                            targetBlack = temp;
+                        }
                     }
                 }
             }
@@ -63,10 +66,15 @@ public class ParticleGlobalControl : MonoBehaviour
             GameObject cur = (GameObject) Resources.Load("Prefabs/Particle White");
             Instantiate(cur);
         }
+
+        for(int i = 0; i < 1; ++i) {
+            GameObject cur = (GameObject) Resources.Load("Prefabs/Particle Pink");
+            Instantiate(cur);
+        }
     }
 
     /// <summary>
-    /// (Unsafe, to be tested !) Clear all particles
+    /// Clear all particles
     /// </summary>
     public void clearAll() {
         GameObject[] fathers = {gameObject.transform.GetChild(0).gameObject, gameObject.transform.GetChild(1).gameObject};
@@ -78,12 +86,33 @@ public class ParticleGlobalControl : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Generate a black particle in given position
+    /// </summary>
+    /// <param name="targetPosition"></param>
     public void generateParticle(Vector3 targetPosition) {
         //Debug.Log("To generate black particle at" + other.transform.position.x + other.transform.position.y);
         GameObject cur = (GameObject) Resources.Load("Prefabs/Particle Black");
         cur = Instantiate(cur);
         //if(cur == null) Debug.Log("Initialization Failed");
         cur.GetComponent<ParticleBlack>().generate(targetPosition);
+    }
+
+    /// <summary>
+    /// Clear all black particles around given location
+    /// </summary>
+    public void clear(Vector3 center, float radius) {
+        GameObject[] fathers = {gameObject.transform.GetChild(0).gameObject, gameObject.transform.GetChild(1).gameObject};
+        foreach(GameObject father in fathers) {
+            int childCount = father.transform.childCount;
+            for(int i = 0; i < childCount; ++i) {
+                Transform child = father.transform.GetChild(i);
+                if(child.gameObject.tag == "Black"
+                && Vector3.Distance(child.position, center) <= radius) {
+                    Destroy(child.gameObject);
+                }
+            }
+        }
     }
 
 }

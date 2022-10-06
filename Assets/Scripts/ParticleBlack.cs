@@ -26,20 +26,30 @@ public class ParticleBlack : Particle {
         TimewaitRest -= Time.deltaTime;
 
         if(timeWaitRest <= 0f) {
-            Vector3 deltaPosition = GameObject.Find("Player").transform.position - trans.position;
-            trans.position += deltaPosition / 4.0f * Time.deltaTime;
+            moveForward(player, 0.25f);
         }
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
         //Debug.Log(other.name);
-        if(other.tag == "Black") {
-            //Debug.Log("Triggered");
-            if(other.transform.position.x > trans.position.x) {
-                delete();
+
+        switch(other.tag) {
+            case "Black": {
+                if(other.transform.position.x > trans.position.x) {
+                    delete();
+                }
+                else {
+                    trans.localScale *= 1.2f;
+                }
+                break;
             }
-            else {
-                trans.localScale *= 1.2f;
+
+            case "White": {
+                trans.localScale /= 1.44f;
+                if(trans.localScale.x < 0.25f) {
+                    delete();
+                }
+                break;
             }
         }
     }

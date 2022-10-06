@@ -10,12 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 85927039632830714}
   - component: {fileID: 916480328539682250}
-  - component: {fileID: 7670630186056187979}
+  - component: {fileID: -2476617206611313758}
   - component: {fileID: 1274913549944291756}
   - component: {fileID: 5665701746724899530}
   m_Layer: 0
-  m_Name: Particle Yellow
-  m_TagString: Yellow
+  m_Name: Particle White
+  m_TagString: White
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -75,9 +75,9 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1069250807
   m_SortingLayer: 3
-  m_SortingOrder: 2
+  m_SortingOrder: 4
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 1, g: 1, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -87,7 +87,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7670630186056187979
+--- !u!114 &-2476617206611313758
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -96,7 +96,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 144284266429271589}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f33e809dc722d6479118530e190592c, type: 3}
+  m_Script: {fileID: 11500000, guid: 0877e657c3b91a943aca3f45432bba5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   current: {fileID: 0}

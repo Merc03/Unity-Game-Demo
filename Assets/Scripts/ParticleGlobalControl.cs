@@ -4,6 +4,42 @@ using UnityEngine;
 
 public class ParticleGlobalControl : MonoBehaviour
 {
+    private GameObject player;
+    private GameObject _targetBlack = null;
+    public GameObject targetBlack {
+        get {
+            return _targetBlack;
+        }
+        set {
+            _targetBlack = value;
+        }
+    }
+
+    void Awake() {
+        player = GameObject.Find("Player");
+    }
+
+    void Update() {
+        targetBlack = null;
+        Transform father = gameObject.transform.Find("Particle Fixed");
+        int childCount = father.childCount;
+        for(int i = 0; i < childCount; ++i) {
+            GameObject temp = father.GetChild(i).gameObject;
+            if(temp.tag == "Black") {
+                if(targetBlack == null) {
+                    targetBlack = temp;
+                }
+                else {
+                    float disOld = Vector3.Distance(player.transform.position, targetBlack.transform.position);
+                    float disNew = Vector3.Distance(player.transform.position, temp.transform.position);
+                    if(disNew < disOld) {
+                        targetBlack = temp;
+                    }
+                }
+            }
+        }
+    }
+
     /// <summary>
     /// Start a new game and generate particle
     /// </summary>
@@ -20,6 +56,11 @@ public class ParticleGlobalControl : MonoBehaviour
 
         for(int i = 0; i < 5; ++i) {
             GameObject cur = (GameObject) Resources.Load("Prefabs/Particle Blue");
+            Instantiate(cur);
+        }
+
+        for(int i = 0; i < 5; ++i) {
+            GameObject cur = (GameObject) Resources.Load("Prefabs/Particle White");
             Instantiate(cur);
         }
     }
@@ -44,18 +85,24 @@ public class ParticleGlobalControl : MonoBehaviour
         //if(cur == null) Debug.Log("Initialization Failed");
         cur.GetComponent<ParticleBlack>().generate(targetPosition);
     }
+
 }
+
+
+
 
 public class Particle : MonoBehaviour
 {
-    public GameObject current;
-    public Transform trans;
-    public SpriteRenderer sRender;
+    protected GameObject player, current, control;
+    protected Transform trans;
+    protected SpriteRenderer sRender;
 
     /// <summary>
     /// Automatically generate the particle outside the camera with particle color
     /// </summary>
     public void generate() {
+        player = GameObject.Find("Player");
+        control = GameObject.Find("Particle Global Control");
         trans = current.GetComponent<Transform>();
         sRender = GetComponent<SpriteRenderer>();
         trans.parent = GameObject.Find("Particle Rotation").transform;
@@ -72,6 +119,8 @@ public class Particle : MonoBehaviour
     /// Manually generate the particle at given position
     /// </summary>
     public void generate(Vector3 targetPosition) {
+        player = GameObject.Find("Player");
+        control = GameObject.Find("Particle Global Control");
         trans = current.GetComponent<Transform>();
         sRender = GetComponent<SpriteRenderer>();
         trans.parent = GameObject.Find("Particle Fixed").transform;
@@ -87,5 +136,24 @@ public class Particle : MonoBehaviour
     public bool isInCamera() {
         // to be rewrite
         return !(trans.position.y <= GlobalSettings.RotationLocationY / 2f);
+    }
+
+    /// <summary>
+    /// Whether the particle has passed the axis where player is in
+    /// </summary>
+    /// <returns></returns>
+    public bool isPastPlayer() {
+        return sRender.isVisible && trans.position.x < -0.1f;
+    }
+
+    public void moveForward(GameObject other, float speedMul) {
+        Vector3 distance = other.transform.position - trans.position;
+        trans.position += distance * speedMul * Time.deltaTime;
+    }
+
+    public void moveForwardAxisY(GameObject other, float speedMul) {
+        Vector3 distance = other.transform.position - trans.position;
+        distance.x = 0f;
+        trans.position += distance * speedMul * Time.deltaTime;
     }
 }

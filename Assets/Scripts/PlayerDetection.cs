@@ -60,7 +60,6 @@ public class PlayerDetection : MonoBehaviour
             }
 
             case "White": {
-
                 break;
             }
 

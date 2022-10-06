@@ -4,17 +4,16 @@ using UnityEngine;
 
 public class ParticleYellow : Particle
 {
-    const float timeTurnBlack = 0.5f;
+    const float timeTurnBlack = 3f;
 
-    float timeTurnRest;
-
-    public float TimeTurnRest {
+    private float _timeTurnRest;
+    float timeTurnRest {
         get {
-            return timeTurnRest;
+            return _timeTurnRest;
         }
         set {
-            timeTurnRest = value;
-            if(timeTurnRest < 0f) timeTurnRest = 0f;
+            _timeTurnRest = value;
+            if(_timeTurnRest < 0f) _timeTurnRest = 0f;
         }
     }
 
@@ -23,15 +22,15 @@ public class ParticleYellow : Particle
 
         generate();
 
-        TimeTurnRest = timeTurnBlack * (1f + Random.value);
+        timeTurnRest = timeTurnBlack * (1f + Random.value);
     }
 
     void Update() {
-        if(sRender.isVisible && trans.position.x < -0.1f) {
-            TimeTurnRest -= Time.deltaTime;
+        if(isPastPlayer()) {
+            timeTurnRest -= Time.deltaTime;
         }
 
-        if(TimeTurnRest <= 0f) {
+        if(timeTurnRest <= 0f) {
             GameObject.Find("Particle Global Control").GetComponent<ParticleGlobalControl>().generateParticle(trans.position);
             delete();
         }

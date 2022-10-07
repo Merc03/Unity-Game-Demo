@@ -25,6 +25,7 @@ public class ParticleWhite : Particle
     }
 
     float followDistance;
+    private bool isPastScreen;
 
     void Awake()
     {
@@ -35,11 +36,18 @@ public class ParticleWhite : Particle
         isParentChanged = false;
         timeSwitchRest = timeSwitchFollow;
         followDistance = 3f * Random.value;
+        isParentChanged = false;
     }
 
     void Update() {
         switch(mode) {
             case "Inactive": {
+                isPastScreen |= sRender.isVisible;
+
+                if(!sRender.isVisible && isPastScreen) {
+                    delete();
+                }
+
                 break;
             }
 
@@ -78,6 +86,9 @@ public class ParticleWhite : Particle
     private void OnTriggerEnter2D(Collider2D other) {
         switch(other.tag) {
             case "Player": {
+                if(mode == "Inactive") {
+                    trans.localScale *= 1.5f;
+                }
                 mode = "Follow";
                 break;
             }

@@ -26,7 +26,7 @@ public class ParticleBlack : Particle {
         TimewaitRest -= Time.deltaTime;
 
         if(timeWaitRest <= 0f) {
-            moveForward(player, 0.25f);
+            moveForward(player, 0.15f);
         }
     }
 

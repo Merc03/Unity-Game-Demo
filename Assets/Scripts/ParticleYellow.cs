@@ -7,6 +7,7 @@ public class ParticleYellow : Particle
     const float timeTurnBlack = 3f;
 
     private float _timeTurnRest;
+    private bool isPastScreen;
     float timeTurnRest {
         get {
             return _timeTurnRest;
@@ -23,11 +24,15 @@ public class ParticleYellow : Particle
         generate();
 
         timeTurnRest = timeTurnBlack * (1f + Random.value);
+        isPastScreen = false;
     }
 
     void Update() {
-        if(isPastPlayer()) {
-            timeTurnRest -= Time.deltaTime;
+        isPastScreen |= sRender.isVisible;
+
+        if(!sRender.isVisible && isPastScreen) {
+            GameObject.Find("Particle Global Control").GetComponent<ParticleGlobalControl>().generateParticle(trans.position);
+            delete();
         }
 
         if(timeTurnRest <= 0f) {
@@ -38,7 +43,7 @@ public class ParticleYellow : Particle
 
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.tag == "Player") {
-            generate();
+            delete();
         }
     }
 }

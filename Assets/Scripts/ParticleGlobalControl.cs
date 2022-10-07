@@ -15,32 +15,47 @@ public class ParticleGlobalControl : MonoBehaviour
         }
     }
 
+    public Dictionary<string, int> particleCount = new Dictionary<string, int>();
+    private Dictionary<string, int> maxParticleCount = new Dictionary<string, int>();
+    private float timeCount, maxTimeCount;
     void Awake() {
         player = GameObject.Find("Player");
+
+        maxParticleCount["Yellow"] = 0;
+        maxParticleCount["Blue"] = 0;
+        maxParticleCount["White"] = 0;
+        maxParticleCount["Pink"] = 0;
+
+        particleCount["Yellow"] = 0;
+        particleCount["Blue"] = 0;
+        particleCount["White"] = 0;
+        particleCount["Pink"] = 0;
     }
 
     void Update() {
-        targetBlack = null;
-        GameObject[] fathersObj = {gameObject.transform.GetChild(0).gameObject, gameObject.transform.GetChild(1).gameObject};
-        foreach(GameObject fatherObj in fathersObj) {
-            Transform father = fatherObj.transform;
-            int childCount = father.childCount;
-            for(int i = 0; i < childCount; ++i) {
-                GameObject temp = father.GetChild(i).gameObject;
-                if(temp.tag == "Black") {
-                    if(targetBlack == null) {
-                          targetBlack = temp;
+        updateTargetBlack();
+
+        timeCount += Time.deltaTime;
+        if(timeCount >= maxTimeCount) {
+            //Debug.Log("Time: " + timeCount);
+            timeCount = 0f;
+            //maxTimeCount = myMath.RandomGaussian(0f, 1f) * 5 + 1f;
+            maxTimeCount = GlobalSettings.getTimeCount();
+
+            string[] tags = {"Yellow", "Blue", "White", "Pink"};
+            foreach(string tag in tags) {
+                if(maxParticleCount[tag] - particleCount[tag] > 0) {
+                    if(Random.value > 0.75f) {
+                        continue;
                     }
-                    else {
-                        float disOld = Vector3.Distance(player.transform.position, targetBlack.transform.position);
-                        float disNew = Vector3.Distance(player.transform.position, temp.transform.position);
-                        if(disNew < disOld) {
-                            targetBlack = temp;
-                        }
-                    }
+                    GameObject cur = (GameObject) Resources.Load("Prefabs/Particle " + tag);
+                    Instantiate(cur);
+                    particleCount[tag] += 1;
+                    break;
                 }
             }
         }
+        //Debug.Log(particleCount.Values);
     }
 
     /// <summary>
@@ -49,10 +64,20 @@ public class ParticleGlobalControl : MonoBehaviour
     public void initialize() {
         clearAll();
 
+        maxParticleCount["Yellow"] = 15;
+        maxParticleCount["Blue"] = 5;
+        maxParticleCount["White"] = 3;
+        maxParticleCount["Pink"] = 1;
+
+        particleCount["Yellow"] = 0;
+        particleCount["Blue"] = 0;
+        particleCount["White"] = 0;
+        particleCount["Pink"] = 0;
+        particleCount["Black"] = 0;
+
         // to be rewrite
 
-        // Yellow particles
-        for(int i = 0; i < GlobalSettings.maxParticle; ++i) {
+        /* for(int i = 0; i < GlobalSettings.maxParticle; ++i) {
             GameObject cur = (GameObject) Resources.Load("Prefabs/Particle Yellow");
             Instantiate(cur);
         }
@@ -70,7 +95,9 @@ public class ParticleGlobalControl : MonoBehaviour
         for(int i = 0; i < 1; ++i) {
             GameObject cur = (GameObject) Resources.Load("Prefabs/Particle Pink");
             Instantiate(cur);
-        }
+        } */
+
+        timeCount = 0f;
     }
 
     /// <summary>
@@ -81,7 +108,9 @@ public class ParticleGlobalControl : MonoBehaviour
         foreach(GameObject father in fathers) {
             int childCount = father.transform.childCount;
             for(int i = 0; i < childCount; ++i) {
-                Destroy(father.transform.GetChild(i).gameObject);
+                GameObject child = father.transform.GetChild(i).gameObject;
+                particleCount[child.tag] -= 1;
+                Destroy(child);
             }
         }
     }
@@ -114,15 +143,38 @@ public class ParticleGlobalControl : MonoBehaviour
                 Transform child = father.transform.GetChild(i);
                 if(child.gameObject.tag == "Black"
                 && Vector3.Distance(child.position, center) <= radius) {
+                    particleCount[child.gameObject.tag] -= 1;
                     Destroy(child.gameObject);
                 }
             }
         }
     }
 
+    public void updateTargetBlack() {
+        targetBlack = null;
+        GameObject[] fathersObj = {gameObject.transform.GetChild(0).gameObject, gameObject.transform.GetChild(1).gameObject};
+        foreach(GameObject fatherObj in fathersObj) {
+            Transform father = fatherObj.transform;
+            int childCount = father.childCount;
+            for(int i = 0; i < childCount; ++i) {
+                GameObject temp = father.GetChild(i).gameObject;
+                if(temp.tag == "Black") {
+                    if(targetBlack == null) {
+                          targetBlack = temp;
+                    }
+                    else {
+                        float disOld = Vector3.Distance(player.transform.position, targetBlack.transform.position);
+                        float disNew = Vector3.Distance(player.transform.position, temp.transform.position);
+                        if(disNew < disOld) {
+                            targetBlack = temp;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }
-
-
 
 
 public class Particle : MonoBehaviour
@@ -132,7 +184,7 @@ public class Particle : MonoBehaviour
     protected SpriteRenderer sRender;
 
     /// <summary>
-    /// Automatically generate the particle outside the camera with particle color
+    /// Automatically generate the particle outside the camera
     /// </summary>
     public void generate() {
         player = GameObject.Find("Player");
@@ -141,12 +193,8 @@ public class Particle : MonoBehaviour
         sRender = GetComponent<SpriteRenderer>();
         trans.parent = GameObject.Find("Particle Rotation").transform;
 
-        do {
-            float height = Random.value * 3;
-            trans.localPosition = (new Vector3(0f, GlobalSettings.RotationLocationY - height, 0f));
-            trans.RotateAround(trans.parent.localPosition, new Vector3(0f, 0f, 1f), GlobalSettings.getDegree() * Random.value);
-        } while(isInCamera());
-
+        float radius = GlobalSettings.nextHeight() + GlobalSettings.RotationRadius;
+        trans.position = trans.parent.position + new Vector3(radius * Mathf.Sin(0.25f * Mathf.PI), radius * (Mathf.Cos(0.25f * Mathf.PI)), 0f);
     }
 
     /// <summary>
@@ -163,21 +211,9 @@ public class Particle : MonoBehaviour
     }
 
     public void delete() {
+        control.GetComponent<ParticleGlobalControl>().particleCount[current.tag] -= 1;
         Destroy(current);
         Destroy(this);
-    }
-
-    public bool isInCamera() {
-        // to be rewrite
-        return !(trans.position.y <= GlobalSettings.RotationLocationY / 2f);
-    }
-
-    /// <summary>
-    /// Whether the particle has passed the axis where player is in
-    /// </summary>
-    /// <returns></returns>
-    public bool isPastPlayer() {
-        return sRender.isVisible && trans.position.x < -0.1f;
     }
 
     public void moveForward(GameObject other, float speedMul) {

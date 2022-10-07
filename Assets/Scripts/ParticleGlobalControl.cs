@@ -17,19 +17,26 @@ public class ParticleGlobalControl : MonoBehaviour
 
     public Dictionary<string, int> particleCount = new Dictionary<string, int>();
     private Dictionary<string, int> maxParticleCount = new Dictionary<string, int>();
+    private Dictionary<string, float> particlPossibility = new Dictionary<string, float>();
+
     private float timeCount, maxTimeCount;
     void Awake() {
         player = GameObject.Find("Player");
 
-        maxParticleCount["Yellow"] = 0;
-        maxParticleCount["Blue"] = 0;
-        maxParticleCount["White"] = 0;
-        maxParticleCount["Pink"] = 0;
+        maxParticleCount["Yellow"] = 16;
+        maxParticleCount["Blue"] = 5;
+        maxParticleCount["White"] = 3;
+        maxParticleCount["Pink"] = 1;
 
         particleCount["Yellow"] = 0;
         particleCount["Blue"] = 0;
         particleCount["White"] = 0;
         particleCount["Pink"] = 0;
+
+        particlPossibility["Yellow"] = 0.8f;
+        particlPossibility["Blue"] = 0.4f;
+        particlPossibility["White"] = 0.9f;
+        particlPossibility["Pink"] = 0.9f;
     }
 
     void Update() {
@@ -44,10 +51,7 @@ public class ParticleGlobalControl : MonoBehaviour
 
             string[] tags = {"Yellow", "Blue", "White", "Pink"};
             foreach(string tag in tags) {
-                if(maxParticleCount[tag] - particleCount[tag] > 0) {
-                    if(Random.value > 0.75f) {
-                        continue;
-                    }
+                if(maxParticleCount[tag] - particleCount[tag] > 0 && Random.value <= particlPossibility[tag]) {
                     GameObject cur = (GameObject) Resources.Load("Prefabs/Particle " + tag);
                     Instantiate(cur);
                     particleCount[tag] += 1;
@@ -63,11 +67,6 @@ public class ParticleGlobalControl : MonoBehaviour
     /// </summary>
     public void initialize() {
         clearAll();
-
-        maxParticleCount["Yellow"] = 15;
-        maxParticleCount["Blue"] = 5;
-        maxParticleCount["White"] = 3;
-        maxParticleCount["Pink"] = 1;
 
         particleCount["Yellow"] = 0;
         particleCount["Blue"] = 0;
@@ -127,8 +126,9 @@ public class ParticleGlobalControl : MonoBehaviour
             cur.GetComponent<ParticleBlack>().generate(targetPosition);
         }
         else {
-             GameObject cur = (GameObject) Resources.Load("Prefabs/Particle Grey");
-            Instantiate(cur);
+            GameObject cur = (GameObject) Resources.Load("Prefabs/Particle Grey");
+            cur = Instantiate(cur);
+            cur.transform.position = targetPosition;
         }
     }
 

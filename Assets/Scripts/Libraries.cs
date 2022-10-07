@@ -6,15 +6,21 @@ static public class GlobalSettings {
     static System.TimeSpan time;
     private static float lastHeight;
     private static float scoreCount;
+    public static float maxHeight = 4.5f;
+    public static float lastTime;
 
     public static void initialize() {
         lastHeight = 3f;
         scoreCount = 0f;
+        lastTime = (float)System.DateTime.Now.TimeOfDay.TotalSeconds;
     }
 
     static void Update()
     {
         time = System.DateTime.Now.TimeOfDay;
+        scoreCount += (float)time.TotalSeconds - lastTime;
+        lastTime = (float)time.TotalSeconds;
+        //Debug.Log("Time = " + scoreCount);
     }
 
     /// <summary>
@@ -23,7 +29,7 @@ static public class GlobalSettings {
     /// <returns></returns>
     static public float getDegree() {
         Update();
-        return (float)time.TotalSeconds * RotationSpeed * getMulti();
+        return (float)time.TotalSeconds * RotationSpeed;
     }
 
     /// <summary>
@@ -31,25 +37,29 @@ static public class GlobalSettings {
     /// </summary>
     /// <returns></returns>
     static public float nextHeight() {
+        Update();
         if(Random.value < 0.25f) {
-            lastHeight =  Random.value * 3f + 0.25f;
+            lastHeight =  Random.value * maxHeight;
         }
         else {
-            lastHeight = myMath.nextGaussian(lastHeight, 3f, 0.25f, 3f);
+            lastHeight = myMath.nextGaussian(lastHeight, 2.5f, 0f, maxHeight);
         }
         return lastHeight;
     }
 
     public static float getTimeCount() {
+        Update();
         return myMath.nextGaussian(0.5f, 5f, 0.25f, 3f) / getMulti();
     }
 
     public static float getMulti() {
-        if(scoreCount > 120f) {
-            return 2f;
+        Update();
+        if(scoreCount > 180f) {
+            return 3f;
         }
         else {
-            return 1f + scoreCount / 120f;
+            //Debug.Log(1f + scoreCount / 90f);
+            return 1f + scoreCount / 90f;
         }
     }
 }

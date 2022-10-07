@@ -7,8 +7,7 @@ public class PlayerControl : MonoBehaviour
     Transform playerTrans;
     Rigidbody2D playerRig;
     CircleCollider2D playerCol;
-    float originalPosition;
-    const float maxHeight = 2.5f;
+    const float upSpeed = 3f;
     float energy;
     void Awake() {
         playerTrans = gameObject.GetComponent<Transform>();
@@ -19,7 +18,6 @@ public class PlayerControl : MonoBehaviour
     }
 
     public void initialize() {
-        originalPosition = -0.1f;
         transform.GetComponentInChildren<PlayerDetection>().initialize();
     }
 
@@ -33,21 +31,15 @@ public class PlayerControl : MonoBehaviour
         //Debug.Log("Updating");
         playerTrans.localRotation = Quaternion.Euler(playerRig.velocity);
         if(Input.GetKey(KeyCode.Space)) {
-            //Debug.Log("Pressed Space");
-            float upSpeed = Physics2D.gravity.magnitude * getUpMulti();
-            playerRig.AddForce(new Vector3(0f, upSpeed, 0f), ForceMode2D.Force);
-            //Debug.Log(SpeedMul);
+            if(transform.position.y < GlobalSettings.maxHeight) {
+                Vector3 Vel = playerRig.velocity;
+                Vel.y = upSpeed;
+                playerRig.velocity = Vel;
+            }
+            else {
+                playerRig.velocity = Vector3.zero;
+            }
         }
-    }
-
-    /// <summary>
-    /// Determines acceleration curve
-    /// </summary>
-    /// <returns></returns>
-    private float getUpMulti() {
-        float portionY = (playerTrans.localPosition.y - originalPosition) / maxHeight;
-
-        return (- portionY * portionY + 1) * 4f;
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
